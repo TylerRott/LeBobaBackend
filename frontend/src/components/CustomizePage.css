@@ -1,0 +1,41 @@
+.customize-page {
+    background-color: #1e1e1e;
+    color: #fff;
+    padding: 2rem;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .custom-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+  }
+  
+  .add-cart-btn {
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #ffbe76;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
