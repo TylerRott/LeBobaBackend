@@ -17,8 +17,39 @@ export const CartProvider = ({ children }) => {
     setCartItems([]);
   };
 
+  const placeOrder = async (totalPrice, selectedEmployeeId) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          totalPrice,
+          selectedItems: cartItems.map((item) => item.id), // Assuming each item has an `id`
+          selectedEmployeeId: 1,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to place order');
+      }
+
+      const data = await response.json();
+      console.log('Order placed:', data);
+
+      // Clear the cart after placing the order
+      clearCart();
+
+      return data; // Return order details if needed
+    } catch (error) {
+      console.error('Error placing order:', error);
+      throw error;
+    }
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart, placeOrder }}>
       {children}
     </CartContext.Provider>
   );
