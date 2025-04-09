@@ -4,7 +4,10 @@ const app = express();
 const path = require('path');
 const menuRoutes = require('./routes/menu');
 const cartRoutes = require('./routes/carts');
+const orderRoutes = require('./routes/orders'); // Import the orders route
 require('dotenv').config();
+
+app.use('/api/orders', orderRoutes); // Register the orders route
 
 
 const cors = require('cors');
