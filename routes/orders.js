@@ -27,4 +27,23 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/getOrder', async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT idorder, totalprice, created_at, idmenu, idemployee 
+       FROM orders 
+       WHERE created_at >= NOW() - INTERVAL '24 hours'
+       ORDER BY created_at DESC`
+    );
+
+    res.status(200).json({
+      message: 'Orders retrieved successfully',
+      orders: result.rows
+    });
+  } catch (error) {
+    console.error('Error retrieving orders:', error);
+    res.status(500).json({ error: 'Failed to retrieve orders' });
+  }
+});
+
 module.exports = router;
