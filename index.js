@@ -7,6 +7,7 @@ const orderRoutes = require('./routes/orders');
 const inventoryRoutes = require('./routes/inventory'); // ✅ Make sure this file exists
 const ingredientRoutes = require('./routes/ingredients'); // ✅ Make sure this file exists
 const associationRoutes = require('./routes/associations'); // Optional, only if you're handling mapping
+const employeeRoutes = require('./routes/employees');
 
 require('dotenv').config();
 const cors = require('cors');
@@ -31,7 +32,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/inventory', inventoryRoutes);      // ✅ Add this
 app.use('/api/ingredients', ingredientRoutes);    // ✅ Add this
 app.use('/api/associations', associationRoutes);  // ✅ Optional
-
+app.use('/api/employees', employeeRoutes);
 // Default route
 app.get('/', (req, res) => {
   res.send('🍵 Welcome to LeBoba POS Backend API!');
