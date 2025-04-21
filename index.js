@@ -9,64 +9,39 @@ require('dotenv').config();
 // Import routes
 const menuRoutes = require('./routes/menu');
 const cartRoutes = require('./routes/carts');
-const orderRoutes = require('./routes/orders');
+const orderRoutes = require('./routes/orders'); // Import the orders route
+require('dotenv').config();
+
+app.use('/api/orders', orderRoutes); // Register the orders route
+
+
+const cors = require('cors');
+// const express = require('express');
+
+app.use(cors()); // Allow all origins (for development) scary
+
 
 // Middleware
-app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-  credentials: true, // Allow cookies and credentials
-}));
 app.use(express.json()); // For parsing JSON in request bodies
 app.use(express.urlencoded({ extended: true })); // For parsing form data if needed
 
-// View Engine (optional if you're using EJS views)
+// View Engine (optional)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Static files (optional - for frontend assets if needed)
+// Static (optional)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Google OAuth setup
-const CLIENT_ID = process.env.CLIENT_ID;
-const oAuth2Client = new OAuth2Client(CLIENT_ID);
-
-// Google OAuth route
-app.post('/auth/google', async (req, res) => {
-  const { idToken } = req.body;
-
-  try {
-    // Verify the ID token
-    const ticket = await oAuth2Client.verifyIdToken({
-      idToken,
-      audience: CLIENT_ID,
-    });
-
-    const payload = ticket.getPayload();
-    const userId = payload.sub; // Google user ID
-    const email = payload.email;
-    const name = payload.name; // Get the user's name from the payload
-
-    // Optionally, store user info in the database here
-
-    // Send the user's name and email in the response
-    res.json({ message: 'Authentication successful', userId, email, name });
-  } catch (error) {
-    console.error('Error verifying ID token:', error);
-    res.status(401).json({ message: 'Invalid ID token' });
-  }
-});
 // Routes
 app.use('/api/menu', menuRoutes);
 app.use('/api/carts', cartRoutes);
-app.use('/api/orders', orderRoutes);
 
 // Root Route
 app.get('/', (req, res) => {
   res.send('🍵 Welcome to LeBoba POS Backend API!');
 });
 
-// Start Server
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Server is running on http://localhost:${PORT}`);
