@@ -17,7 +17,7 @@ const associationRoutes = require('./routes/associations'); // optional if neede
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend
+  origin: 'https://frontend33-v41s.onrender.com', // Allow requests from your frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   credentials: true, // Allow cookies and credentials
 }));
