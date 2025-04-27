@@ -10,10 +10,14 @@ require('dotenv').config();
 const menuRoutes = require('./routes/menu');
 const cartRoutes = require('./routes/carts');
 const orderRoutes = require('./routes/orders');
+const employeeRoutes = require('./routes/employees');
+const ingredientRoutes = require('./routes/ingredients');
+const inventoryRoutes = require('./routes/inventory');
+const associationRoutes = require('./routes/associations'); // optional if needed
 
 // Middleware
 app.use(cors({
-  origin: 'https://frontend33-v41s.onrender.com', // Allow requests from your frontend
+  origin: 'http://localhost:5173', // Allow requests from your frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   credentials: true, // Allow cookies and credentials
 }));
@@ -60,7 +64,10 @@ app.post('/auth/google', async (req, res) => {
 app.use('/api/menu', menuRoutes);
 app.use('/api/carts', cartRoutes);
 app.use('/api/orders', orderRoutes);
-
+app.use('/api/employees', employeeRoutes);
+app.use('/api/ingredients', ingredientRoutes);
+app.use('/api/inventory', inventoryRoutes);
+app.use('/api/associations', associationRoutes);
 // Root Route
 app.get('/', (req, res) => {
   res.send('🍵 Welcome to LeBoba POS Backend API!');
