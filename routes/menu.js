@@ -2,18 +2,22 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/db'); // Update path if needed
 
-// GET /menu/items - Fetch all menu items
+// ===========================
+// 📜 Fetch All Menu Items
+// ===========================
 router.get('/items', async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM menu ORDER BY idmenu');
     res.status(200).json(result.rows);
   } catch (err) {
-    console.error('Error fetching menu items:', err); 
+    console.error('Error fetching menu items:', err);
     res.status(500).json({ error: 'Failed to fetch menu items' });
   }
 });
 
-// GET /menu/categories - Fetch menu categories (optional)
+// ===========================
+// 📚 Fetch Menu Categories (optional)
+// ===========================
 router.get('/categories', async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM categories');
@@ -24,7 +28,9 @@ router.get('/categories', async (req, res) => {
   }
 });
 
-// GET /menu/item/:id - Fetch a specific item by ID
+// ===========================
+// 🔎 Fetch Single Menu Item by ID
+// ===========================
 router.get('/item/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -39,9 +45,54 @@ router.get('/item/:id', async (req, res) => {
   }
 });
 
+// ===========================
+// 🆕 Add FULL Menu Item (Menu + Ingredients + Inventory)
+// ===========================
+router.post('/full-add', async (req, res) => {
+  const { item, price, ingredients, inventory } = req.body;
+
+  const client = await db.connect();
+  try {
+    await client.query('BEGIN');
+
+    // Insert new menu item
+    const menuResult = await client.query(
+      'INSERT INTO menu (item, price) VALUES ($1, $2) RETURNING idmenu',
+      [item, price]
+    );
+    const newMenuId = menuResult.rows[0].idmenu;
+
+    // Insert linked ingredients
+    for (const ing of ingredients) {
+      await client.query(
+        'INSERT INTO menu_ingredients (idmenu, idingredient, quantity_needed) VALUES ($1, $2, $3)',
+        [newMenuId, ing.idingredient, ing.quantity_needed]
+      );
+    }
+
+    // Insert linked inventory
+    for (const inv of inventory) {
+      await client.query(
+        'INSERT INTO menu_inventory (idmenu, idinventory, quantity_needed) VALUES ($1, $2, $3)',
+        [newMenuId, inv.idinventory, inv.quantity_needed]
+      );
+    }
+
+    await client.query('COMMIT');
+
+    res.status(201).json({ message: 'Menu item and associations added!', idmenu: newMenuId });
+
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('Error adding full menu item:', err);
+    res.status(500).json({ error: 'Failed to add menu item with ingredients and inventory' });
+  } finally {
+    client.release();
+  }
+});
 
 // ===========================
-// 🔧 ADDED: Update Menu Item
+// ✏️ Update Menu Item
 // ===========================
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
@@ -59,9 +110,8 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-
 // ===========================
-// 🗑️ ADDED: Delete Menu Item
+// 🗑️ Delete Menu Item
 // ===========================
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
