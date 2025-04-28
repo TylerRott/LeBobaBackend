@@ -6,13 +6,13 @@ const db = require('../db/db'); // Adjust as needed
 router.post('/', async (req, res) => {
   const { totalPrice, selectedItems } = req.body;
 
-  // ✅ Basic validation
+  // Basic validation
   if (!totalPrice || !Array.isArray(selectedItems) || selectedItems.length === 0) {
     return res.status(400).json({ error: 'Missing or invalid order data' });
   }
 
   try {
-    // ✅ Place the order (hardcoded employee ID 1)
+    // Place the order (hardcoded employee ID 1)
     const result = await db.query(
       'INSERT INTO orders (totalprice, idmenu, idemployee) VALUES ($1, $2, $3) RETURNING idorder',
       [totalPrice, selectedItems, 1]

@@ -15,12 +15,25 @@ router.post('/', async (req, res) => {
   res.status(201).json({ message: 'Inventory item added' });
 });
 
-// Update inventory item
+// Update inventory item fully
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { item, quantity } = req.body;
   await db.query('UPDATE inventory SET item = $1, quantity = $2 WHERE idinventory = $3', [item, quantity, id]);
   res.json({ message: 'Inventory updated' });
+});
+
+// Add quantity to inventory item
+router.patch('/:id/add', async (req, res) => {
+  const { id } = req.params;
+  const { amount } = req.body; // amount to add
+
+  if (typeof amount !== 'number') {
+    return res.status(400).json({ error: 'Invalid amount' });
+  }
+
+  await db.query('UPDATE inventory SET quantity = quantity + $1 WHERE idinventory = $2', [amount, id]);
+  res.json({ message: 'Inventory quantity updated' });
 });
 
 // Delete inventory item
