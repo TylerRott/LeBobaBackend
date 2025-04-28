@@ -134,7 +134,7 @@ router.put('/:id', async (req, res) => {
 // ===========================
 // 🗑️ Delete Menu Item
 // ===========================
-router.delete('/:id', async (req, res) => {
+router.delete('/items/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
