@@ -91,6 +91,27 @@ router.post('/full-add', async (req, res) => {
   }
 });
 
+//Add Menu Item (without ingredients and inventory)
+// Add a new menu item
+router.post('/add', async (req, res) => {
+  const { item, price } = req.body;
+
+  if (!item || !price) {
+    return res.status(400).json({ error: 'Missing item or price' });
+  }
+
+  try {
+    const result = await db.query(
+      'INSERT INTO menu (item, price) VALUES ($1, $2) RETURNING *',
+      [item, price]
+    );
+    res.status(201).json({ message: 'Menu item added successfully', menuItem: result.rows[0] });
+  } catch (err) {
+    console.error('Error adding menu item:', err);
+    res.status(500).json({ error: 'Failed to add menu item' });
+  }
+});
+
 // ===========================
 // ✏️ Update Menu Item
 // ===========================
