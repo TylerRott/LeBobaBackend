@@ -20,6 +20,7 @@ router.post('/google', async (req, res) => {
 
     const payload = ticket.getPayload();
     const name = payload.name.trim();
+    const email = payload.email.trim();
     // console.log('🔍 Extracted and trimmed name:', name);
 
     const userCheck = await db.query(
@@ -36,6 +37,7 @@ router.post('/google', async (req, res) => {
         message: 'Authentication successful',
         userId: user.idemployee,
         name: user.name,
+        email: user.email,
       });
     }
 
