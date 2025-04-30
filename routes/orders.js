@@ -6,6 +6,9 @@ const db = require('../db/db'); // Adjust as needed
 router.post('/', async (req, res) => {
   const { totalPrice, selectedItems, employeeId } = req.body;
 
+  // Log the received payload for debugging
+  console.log('Received payload:', { totalPrice, selectedItems, employeeId });
+
   // Basic validation
   if (!totalPrice || !Array.isArray(selectedItems) || selectedItems.length === 0 || !employeeId) {
     return res.status(400).json({ error: 'Missing or invalid order data' });
