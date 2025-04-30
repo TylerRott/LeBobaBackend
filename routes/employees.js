@@ -39,16 +39,16 @@ router.get('/', async (req, res) => {
 // Check if Is Manager
 // ===========================
 router.get('/isManager', async (req, res) => {
-  const { email } = req.query;
+  const { name } = req.query; // Use name instead of email
 
-  if (!email) {
-    return res.status(400).json({ error: 'Email is required' });
+  if (!name) {
+    return res.status(400).json({ error: 'Name is required' });
   }
 
   try {
     const result = await db.query(
-      'SELECT * FROM employees WHERE email = $1 AND title = $2',
-      [email, 'Manager']
+      'SELECT * FROM employees WHERE name = $1 AND title = $2',
+      [name, 'Manager']
     );
 
     if (result.rows.length > 0) {
