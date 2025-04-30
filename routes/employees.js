@@ -23,6 +23,30 @@ router.post('/', async (req, res) => {
 });
 
 // ===========================
+// 🗑️ Delete Employee
+// ===========================
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ error: 'Employee ID is required' });
+  }
+
+  try {
+    const result = await db.query('DELETE FROM employees WHERE idemployee = $1 RETURNING *', [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+
+    res.status(200).json({ message: 'Employee deleted successfully', employee: result.rows[0] });
+  } catch (err) {
+    console.error('Error deleting employee:', err);
+    res.status(500).json({ error: 'Failed to delete employee' });
+  }
+});
+
+// ===========================
 // Fetch All Employees
 // ===========================
 router.get('/', async (req, res) => {
