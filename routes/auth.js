@@ -11,7 +11,7 @@ router.post('/google', async (req, res) => {
   const { idToken } = req.body;
 
   try {
-    console.log('🛂 Received ID token from frontend:', idToken);
+    // console.log('🛂 Received ID token from frontend:', idToken);
 
     const ticket = await oAuth2Client.verifyIdToken({
       idToken,
@@ -20,18 +20,18 @@ router.post('/google', async (req, res) => {
 
     const payload = ticket.getPayload();
     const name = payload.name.trim();
-    console.log('🔍 Extracted and trimmed name:', name);
+    // console.log('🔍 Extracted and trimmed name:', name);
 
     const userCheck = await db.query(
       'SELECT idemployee, name FROM employees WHERE name = $1',
       [name]
     );
 
-    console.log('🗄️ DB lookup result:', userCheck.rows);
+    // console.log('🗄️ DB lookup result:', userCheck.rows);
 
     if (userCheck.rows.length > 0) {
       const user = userCheck.rows[0];
-      console.log('✅ User exists, returning:', user);
+      // console.log('✅ User exists, returning:', user);
       return res.json({
         message: 'Authentication successful',
         userId: user.idemployee,
