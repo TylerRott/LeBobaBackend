@@ -86,4 +86,31 @@ router.get('/isManager', async (req, res) => {
   }
 });
 
+// ===========================
+// Check if Is Employee
+// ===========================
+router.get('/isEmployee', async (req, res) => {
+  const { name } = req.query; // Extract the name from the query parameters
+
+  if (!name) {
+    return res.status(400).json({ error: 'Name is required' });
+  }
+
+  try {
+    const result = await db.query(
+      'SELECT * FROM employees WHERE name = $1',
+      [name]
+    );
+
+    if (result.rows.length > 0) {
+      res.status(200).json({ isEmployee: true });
+    } else {
+      res.status(200).json({ isEmployee: false });
+    }
+  } catch (err) {
+    console.error('Error checking employee status:', err);
+    res.status(500).json({ error: 'Failed to check employee status' });
+  }
+});
+
 module.exports = router;
