@@ -37,7 +37,7 @@ router.post('/google', async (req, res) => {
         message: 'Authentication successful',
         userId: user.idemployee,
         name: user.name,
-        email: user.email,
+        email: email,
       });
     }
 
@@ -54,6 +54,7 @@ router.post('/google', async (req, res) => {
       message: 'Authentication successful',
       userId: createdUser.idemployee,
       name: createdUser.name,
+      email: email,
     });
   } catch (error) {
     console.error('❌ Error verifying ID token or accessing DB:', error);
