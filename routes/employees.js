@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
 // ===========================
 // Fetch All Employees
 // ===========================
-router.get('/employees', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM employees ORDER BY idemployee');
     res.status(200).json(result.rows);
