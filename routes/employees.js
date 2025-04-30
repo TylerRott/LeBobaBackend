@@ -35,4 +35,31 @@ router.get('/', async (req, res) => {
   }
 });
 
+// ===========================
+// Check if Is Manager
+// ===========================
+router.get('/isManager', async (req, res) => {
+  const { email } = req.query;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  try {
+    const result = await db.query(
+      'SELECT * FROM employees WHERE email = $1 AND title = $2',
+      [email, 'Manager']
+    );
+
+    if (result.rows.length > 0) {
+      res.status(200).json({ isManager: true });
+    } else {
+      res.status(200).json({ isManager: false });
+    }
+  } catch (err) {
+    console.error('Error checking manager status:', err);
+    res.status(500).json({ error: 'Failed to check manager status' });
+  }
+});
+
 module.exports = router;
