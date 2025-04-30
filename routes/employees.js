@@ -22,4 +22,17 @@ router.post('/', async (req, res) => {
   }
 });
 
+// ===========================
+// Fetch All Employees
+// ===========================
+router.get('/employees', async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM employees ORDER BY idemployee');
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Error fetching menu items:', err);
+    res.status(500).json({ error: 'Failed to fetch menu items' });
+  }
+});
+
 module.exports = router;
