@@ -29,7 +29,12 @@ router.post('/google', async (req, res) => {
     if (userCheck.rows.length > 0) {
       // User exists, return their database userId
       const user = userCheck.rows[0];
+      console.log("🔍 Extracted Google name:", name);
+      console.log("📄 DB query result:", userCheck.rows);
+      console.log("👤 UserID found in DB:", user.idemployee);
+
       return res.json({
+        
         message: 'Authentication successful',
         userId: user.idemployee,
         name: user.name,
