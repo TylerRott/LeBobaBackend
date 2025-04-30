@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
 // ===========================
 router.get('/', async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM employees ORDER BY idemployee');
+    const result = await db.query('SELECT * FROM employees ORDER BY title, idemployee;');
     res.status(200).json(result.rows);
   } catch (err) {
     console.error('Error fetching menu items:', err);
