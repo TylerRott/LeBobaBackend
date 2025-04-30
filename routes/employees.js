@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
 // Check if Is Manager
 // ===========================
 router.get('/isManager', async (req, res) => {
-  const { name } = req.query; // Use name instead of email
+  const { name } = req.query; // Extract the name from the query parameters
 
   if (!name) {
     return res.status(400).json({ error: 'Name is required' });
